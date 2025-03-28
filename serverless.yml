@@ -1,0 +1,29 @@
+service: prompt-library
+
+provider:
+  name: aws
+  runtime: python3.11
+  region: us-east-1
+  memorySize: 512
+  timeout: 30
+
+functions:
+  fastapi:
+    handler: app.main.handler
+    events:
+      - http:
+          path: /{proxy+}
+          method: any
+
+package:
+  exclude:
+    - tests/**
+    - .venv/**
+    - .git/**
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    layer: true
+plugins:
+  - serverless-python-requirements
